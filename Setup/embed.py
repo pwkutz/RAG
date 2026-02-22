@@ -21,9 +21,23 @@ class Embedder:
 
     def embed_database(self):
 
+        """embed one after another all chunks of the given dataset"""
+
         for i, chunk in enumerate(self.dataset):
             self.add_chunk_to_database(chunk)
             print(f'Added chunk {i + 1}/{len(self.dataset)} to the database')
+
+def cosine_similarity(a, b) -> float:
+
+    """cosine similarity function: used to compute the distance between two vectors in vector space aka. compute their similarity"""
+
+    dot_product: float = sum([x * y for x, y in zip(a, b)])
+    norm_a: float = sum([x ** 2 for x in a]) ** 0.5
+    norm_b: float = sum([x ** 2 for x in b]) ** 0.5
+    return dot_product / (norm_a * norm_b)
+
+
+
 
 def main(dataset: list[str]):
 
