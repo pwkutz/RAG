@@ -10,6 +10,8 @@ class Embedder:
         self.EMBEDDING_MODEL: str = r'hf.co/CompendiumLabs/bge-base-en-v1.5-gguf'
         self.VECTOR_DB: list[tuple[str, list[float]]] = []
         self.dataset: list[str] = dataset
+        self.query: str = ""
+        self.similarities: list[tuple[str, float]] = []
 
 
     def add_chunk_to_database(self, chunk):
@@ -26,6 +28,18 @@ class Embedder:
         for i, chunk in enumerate(self.dataset):
             self.add_chunk_to_database(chunk)
             print(f'Added chunk {i + 1}/{len(self.dataset)} to the database')
+
+    def retrieve(self, query, top_n=3):
+        query_embedding = ollama.embed(model=self.EMBEDDING_MODEL, input=query)['embeddings'][0]
+        # temporary list to store (chunk, similarity) pairs
+        self.similarities: list[tuple[str, float]] = []
+        for chunk, embedding in self.VECTOR_DB:
+            similarity: float = cosine_similarity(query_embedding, embedding)
+            self.similarities.append((chunk, similarity))
+        # sort by similarity (1=similar | 0 = not similar) in descending order, because higher similarity means more relevant chunks
+        similarities.sort(key=lambda x: x[1], reverse=True)
+        # finally, return the top N most relevant chunks
+        self.similarities: list[tuple[str, float]] = self.similarities[:top_n]
 
 def cosine_similarity(a, b) -> float:
 
