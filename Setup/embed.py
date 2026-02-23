@@ -52,7 +52,7 @@ def cosine_similarity(a, b) -> float:
     norm_b: float = sum([x ** 2 for x in b]) ** 0.5
     return dot_product / (norm_a * norm_b)
 
-def show_knowledge(retrieved_knowledge: list[tuple[str, float]]):
+def show_knowledge(retrieved_knowledge: list[tuple[str, float]]) -> str:
 
     print('Retrieved knowledge:')
     for chunk, similarity in retrieved_knowledge:
@@ -62,6 +62,7 @@ def show_knowledge(retrieved_knowledge: list[tuple[str, float]]):
      Use only the following pieces of context to answer the question. Don't make up any new information:
      {'\n'.join([f' - {chunk}' for chunk, similarity in retrieved_knowledge])}
      '''
+    return instruction_prompt
 
 
 def main(dataset: list[str], input_query: str) -> list[tuple[str, float]]:
