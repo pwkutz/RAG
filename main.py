@@ -3,12 +3,18 @@
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 from setup.dataset import get_dataset as dataset
-from setup.embed import main as embedding
+from setup.embed import main as embedding, show_knowledge
+
+
+def
 
 def main():
 
     data: list[str] = dataset()
-    embedding(dataset=data)
+    retrieved_knowledge: list[tuple[str, float]] = embedding(dataset=data, input_query = 'How old gets a cat?') # N most to the query most similar chunks
+    show_knowledge(retrieved_knowledge = retrieved_knowledge) # show the N chunks which are the most similar to the query
+
+
 
 
 # Press the green button in the gutter to run the script.

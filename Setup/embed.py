@@ -37,9 +37,11 @@ class Embedder:
             similarity: float = cosine_similarity(query_embedding, embedding)
             self.similarities.append((chunk, similarity))
         # sort by similarity (1=similar | 0 = not similar) in descending order, because higher similarity means more relevant chunks
-        similarities.sort(key=lambda x: x[1], reverse=True)
+        self.similarities.sort(key=lambda x: x[1], reverse=True)
         # finally, return the top N most relevant chunks
         self.similarities: list[tuple[str, float]] = self.similarities[:top_n]
+        return self.similarities
+
 
 def cosine_similarity(a, b) -> float:
 
@@ -50,10 +52,23 @@ def cosine_similarity(a, b) -> float:
     norm_b: float = sum([x ** 2 for x in b]) ** 0.5
     return dot_product / (norm_a * norm_b)
 
+def show_knowledge(retrieved_knowledge: list[tuple[str, float]]):
+
+    print('Retrieved knowledge:')
+    for chunk, similarity in retrieved_knowledge:
+        print(f' - (similarity: {similarity:.2f}) {chunk}')
+
+    instruction_prompt = f'''You are a helpful chatbot.
+     Use only the following pieces of context to answer the question. Don't make up any new information:
+     {'\n'.join([f' - {chunk}' for chunk, similarity in retrieved_knowledge])}
+     '''
 
 
-
-def main(dataset: list[str]):
+def main(dataset: list[str], input_query: str):
 
     embedding: Embedder = Embedder(dataset = dataset)
-    embedding.embed_database()
+    embedding.embed_database() # embed aka. vectorise all chunks
+
+    retrieved_knowledge = embedding.retrieve(input_query) # find N most similar text chunks to the inputted query
+
+
