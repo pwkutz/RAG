@@ -6,8 +6,6 @@ from setup.dataset import get_dataset as dataset
 from setup.embed import main as embedding, show_knowledge
 
 
-def
-
 def main():
 
     data: list[str] = dataset()

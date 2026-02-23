@@ -64,11 +64,11 @@ def show_knowledge(retrieved_knowledge: list[tuple[str, float]]):
      '''
 
 
-def main(dataset: list[str], input_query: str):
+def main(dataset: list[str], input_query: str) -> list[tuple[str, float]]:
 
     embedding: Embedder = Embedder(dataset = dataset)
     embedding.embed_database() # embed aka. vectorise all chunks
 
-    retrieved_knowledge = embedding.retrieve(input_query) # find N most similar text chunks to the inputted query
+    return embedding.retrieve(input_query) # find N most similar text chunks to the inputted query
 
 
